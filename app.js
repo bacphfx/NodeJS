@@ -1,14 +1,14 @@
+const path = require("path");
 const express = require("express");
 
 const app = express();
 
-app.use("/users", (req, res, next) => {
-  res.send("<p>The Middleware that handles just /users</p>");
-});
+const indexRoute = require("./routes/index");
+const usersRoute = require("./routes/users");
 
-app.use("/", (req, res, next) => {
-  res.send("<p>The Middleware that handles just /</p>");
-  // next()
-});
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use(indexRoute);
+app.use(usersRoute);
 
 app.listen(3000);
