@@ -6,3 +6,19 @@ const p = path.join(
   "data",
   "movieList.json"
 );
+
+const getMoviesFromFile = (cb) => {
+  fs.readFile(p, (err, fileContent) => {
+    if (err) {
+      cb([]);
+    } else {
+      cb(JSON.parse(fileContent));
+    }
+  });
+};
+
+module.exports = class Movie {
+  static fetchAll(cb) {
+    getMoviesFromFile(cb);
+  }
+};

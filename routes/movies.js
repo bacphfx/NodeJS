@@ -1,8 +1,9 @@
 const express = require("express");
 const route = express.Router();
 
-route.get("/", (req, res, next) => {
-  res.send("<h1>Hello</h1>");
-});
+const movieController = require("../controllers/movie");
+
+// Get movie trending
+route.get("/api/movies/trending/:page", movieController.getTrendingMovies);
 
 module.exports = route;
