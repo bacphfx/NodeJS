@@ -63,6 +63,40 @@ class User {
       });
   }
 
+  deleteItemFromCart(productId) {
+    const updateCartItems = this.cart.items.filter((item) => {
+      return item.productId.toString() !== productId.toString();
+    });
+    const db = getDb();
+    return db
+      .collection("users")
+      .updateOne(
+        { _id: new ObjectId(this._id) },
+        { $set: { cart: { items: updateCartItems } } }
+      );
+  }
+
+  addOrder() {
+    const db = getDb();
+    return db
+      .collection("order")
+      .insertOne(this.cart)
+      .then(() => {
+        this.cart = { items: [] };
+        return db
+          .collection("users")
+          .updateOne(
+            { _id: new ObjectId(this._id) },
+            { $set: { cart: { items: [] } } }
+          );
+      });
+  }
+
+  // getOrder(){
+  //   const db=getDb()
+  //   return db.collection('order')
+  // }
+
   static findById(userId) {
     const db = getDb();
     return db.collection("users").findOne({ _id: new ObjectId(userId) });
