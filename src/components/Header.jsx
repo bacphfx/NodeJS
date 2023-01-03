@@ -18,7 +18,7 @@ const Header = () => {
             <a href="/order">Oder</a>
           </li>
           <li className="main-header__item">
-            <a href="/add-product">Add product</a>
+            <a href="/admin/add-product">Add product</a>
           </li>
           <li className="main-header__item">
             <a href="/admin/products">Admin Products</a>

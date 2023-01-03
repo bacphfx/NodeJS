@@ -2,15 +2,15 @@ import React from "react";
 
 const AddProductForm = () => {
   return (
-    <form className="product-form" action="/add-product" method="post">
+    <form className="product-form" action="/admin/add-product" method="post">
       <div className="form-control">
         <label htmlFor="title">Title</label>
         <input type="text" name="title" id="title" />
       </div>
 
       <div className="form-control">
-        <label htmlFor="imgURL">Image URL</label>
-        <input type="text" name="imgURL" id="imgURL" />
+        <label htmlFor="imageUrl">Image URL</label>
+        <input type="text" name="imageUrl" id="imageUrl" />
       </div>
 
       <div className="form-control">
