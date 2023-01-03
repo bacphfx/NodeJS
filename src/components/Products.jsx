@@ -15,8 +15,8 @@ const RenderProduct = ({ product }) => {
         <p className="product__description">{product.description}</p>
       </div>
       <div className="card__actions">
-        <a href={`/product/${product.id}`} className="btn">
-          Detail
+        <a href={`/products/${product.id}`} className="btn">
+          Details
         </a>
         <a href="/cart" className="btn">
           Add to cart

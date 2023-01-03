@@ -1,14 +1,24 @@
-// import React from "react";
-// import Header from "../components/Header";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import Header from "../components/Header";
 
-// const ProductDetail = ({ match }) => {
-//     const product =
-//   return (
-//     <div>
-//       <Header />
-//       <ProductDetail productId={match.params.productId} />
-//     </div>
-//   );
-// };
+const ProductDetail = ({ match }) => {
+  const productId = match.params.productId;
+  console.log(productId);
+  const [product, setProduct] = useState({});
+  useEffect(() => {
+    axios.get(`http://localhost:5000/product/${productId}`).then((res) => {
+      const data = res.data;
+      console.log(data);
+      setProduct(data);
+    });
+  });
+  return (
+    <div>
+      <Header />
+      <ProductDetail product={product} />
+    </div>
+  );
+};
 
-// export default ProductDetail;
+export default ProductDetail;
