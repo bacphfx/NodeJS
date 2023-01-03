@@ -1,22 +1,27 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Header from "../components/Header";
+import Detail from "../components/Detail";
 
-const ProductDetail = ({ match }) => {
-  const productId = match.params.productId;
-  console.log(productId);
+const ProductDetail = () => {
+  const { productId } = useParams();
+
   const [product, setProduct] = useState({});
   useEffect(() => {
-    axios.get(`http://localhost:5000/product/${productId}`).then((res) => {
-      const data = res.data;
-      console.log(data);
-      setProduct(data);
-    });
-  });
+    axios
+      .get(`http://localhost:5000/products/${productId}`)
+      .then((res) => {
+        const data = res.data;
+        setProduct(data);
+      })
+      .catch((err) => console.log(err));
+  }, [productId]);
+
   return (
     <div>
       <Header />
-      <ProductDetail product={product} />
+      <Detail product={product} />
     </div>
   );
 };

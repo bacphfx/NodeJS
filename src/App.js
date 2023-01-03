@@ -1,19 +1,21 @@
-import Home from "./pages/Home";
+import Shop from "./pages/Shop";
 import AddProduct from "./pages/AddProduct";
 import "./css/main.css";
 import "./css/product.css";
 import "./css/forms.css";
-import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProductDetail from "./pages/ProductDetail";
+import Products from "./pages/Products";
 
 function App() {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/admin/add-product" component={AddProduct} />
-        <Route path="/products/:productId" component={ProductDetail} />
-      </Switch>
+      <Routes>
+        <Route exact path="/" element={<Shop />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/admin/add-product" element={<AddProduct />} />
+        <Route path="/products/:productId" element={<ProductDetail />} />
+      </Routes>
     </BrowserRouter>
   );
 }

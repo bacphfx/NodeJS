@@ -18,9 +18,12 @@ const RenderProduct = ({ product }) => {
         <a href={`/products/${product.id}`} className="btn">
           Details
         </a>
-        <a href="/cart" className="btn">
-          Add to cart
-        </a>
+        <form action="/cart" method="post">
+          <button class="btn" type="submit">
+            Add to cart
+          </button>
+          <input type="hidden" name="productId" value={product.id} />
+        </form>
       </div>
     </article>
   );
@@ -30,9 +33,6 @@ const Products = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // fetch("http://localhost:5000")
-    //   .then((res) => res.json())
-    //   .then((data) => setProducts(data));
     axios
       .get("http://localhost:5000")
       .then((res) => {
@@ -40,7 +40,7 @@ const Products = () => {
         setProducts(data);
       })
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   return (
     <div className="grid">
