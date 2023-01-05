@@ -34,7 +34,7 @@ const SearchResult = ({ query }) => {
   useEffect(() => {
     async function fetchData() {
       const request = await axios.get(url);
-      setMovies(request.data);
+      setMovies(request.data.results);
       return request;
     }
 
