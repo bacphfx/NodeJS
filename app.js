@@ -1,11 +1,15 @@
-const cors = require("cors");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const express = require("express");
 
 const app = express();
 
+const hotelRoute = require("./routes/hotel");
+
 app.use(cors());
+
+app.use(hotelRoute);
 
 mongoose
   .connect(
