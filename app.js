@@ -5,11 +5,22 @@ const express = require("express");
 
 const app = express();
 
-const hotelRoute = require("./routes/hotel");
+const authRoute = require("./routes/auth");
+const userRoute = require("./routes/users");
+const hotelRoute = require("./routes/hotels");
+const roomRoute = require("./routes/rooms");
 
 app.use(cors());
+app.use(express.json());
 
-app.use(hotelRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
+app.use("/api/hotels", hotelRoute);
+app.use("/api/rooms", roomRoute);
+
+app.use((req, res, next) => {
+  res.status(404).send({ message: "Route not found" });
+});
 
 mongoose
   .connect(

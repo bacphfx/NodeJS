@@ -1,8 +1,13 @@
 const express = require("express");
+const hotelController = require("../controllers/hotel");
 const router = express.Router();
 
-const hotelController = require("../controllers/hotel");
-
+// CREATE
+router.post("/", hotelController.createHotel);
+// UPDATE
+// DELETE
+// GET
+// GET ALL
 router.get("/", hotelController.getHotels);
 
 module.exports = router;
