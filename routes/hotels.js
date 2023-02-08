@@ -6,6 +6,7 @@ const {
   deleteHotel,
   getHotel,
   countByCity,
+  countByType,
 } = require("../controllers/hotel");
 const { verifyAdmin } = require("../middleware/auth");
 const router = express.Router();
@@ -26,5 +27,7 @@ router.get("/find/:id", getHotel);
 router.get("/", getHotels);
 
 router.get("/countByCity", countByCity);
+
+router.get("/countByType", countByType);
 
 module.exports = router;

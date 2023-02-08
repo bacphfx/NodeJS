@@ -61,3 +61,20 @@ exports.countByCity = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
+
+exports.countByType = (req, res, next) => {
+  const types = ["hotel", "apartment", "resort", "villa", "cabin"];
+
+  Promise.all(
+    types.map((type) => {
+      return {
+        type: type.charAt(0).toUpperCase() + type.slice(1),
+        count: Hotel.countDocuments({ type: type })[0],
+      };
+    })
+  )
+    .then((type, count) => {
+      res.status(200).json(list);
+    })
+    .catch((err) => console.log(err));
+};
