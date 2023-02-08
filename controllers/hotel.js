@@ -6,7 +6,6 @@ exports.createHotel = (req, res, next) => {
     .save()
     .then(() => {
       res.status(200).json(newHotel);
-      console.log("Hotel created");
     })
     .catch((err) => res.status(500).json(err));
 };
