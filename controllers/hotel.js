@@ -45,3 +45,19 @@ exports.getHotels = (req, res, next) => {
     return res.status(200).json(hotels);
   });
 };
+
+exports.countByCity = (req, res, next) => {
+  const cities = req.query.cities
+    .split(",")
+    .map((str) => str.replaceAll("_", " "));
+
+  Promise.all(
+    cities.map((city) => {
+      return Hotel.countDocuments({ city: city });
+    })
+  )
+    .then((list) => {
+      res.status(200).json(list);
+    })
+    .catch((err) => console.log(err));
+};

@@ -5,6 +5,7 @@ const {
   updateHotel,
   deleteHotel,
   getHotel,
+  countByCity,
 } = require("../controllers/hotel");
 const { verifyAdmin } = require("../middleware/auth");
 const router = express.Router();
@@ -16,12 +17,14 @@ router.post("/", verifyAdmin, createHotel);
 router.put("/:id", verifyAdmin, updateHotel);
 
 // DELETE
-router.delete("/:id", verifyAdmin, deleteHotel);
+router.delete("/delete/:id", verifyAdmin, deleteHotel);
 
 // GET
-router.get("/:id", getHotel);
+router.get("/find/:id", getHotel);
 
 // GET ALL
 router.get("/", getHotels);
+
+router.get("/countByCity", countByCity);
 
 module.exports = router;
