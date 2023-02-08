@@ -9,7 +9,6 @@ const Featured = () => {
       const res = await axios.get(
         "hotels/countByCity?cities=Ha_Noi,Ho_Chi_Minh,Da_Nang"
       );
-      console.log(res);
       setData(res.data);
       return res;
     }

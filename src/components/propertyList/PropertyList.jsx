@@ -7,7 +7,6 @@ const PropertyList = () => {
   useEffect(() => {
     async function fetchData() {
       const res = await axios.get("hotels/countByType");
-      console.log(res);
       setData(res.data);
       return res;
     }
@@ -25,11 +24,13 @@ const PropertyList = () => {
     <div className="pList">
       {data &&
         images.map((img, i) => (
-          <div className="pListItem">
+          <div className="pListItem" key={i}>
             <img src={img} alt="" className="pListImg" />
             <div className="pListTitles">
-              <h1>Hotels</h1>
-              <h2>{data[i]} hotels</h2>
+              <h1>{data[i]?.type}</h1>
+              <h2>
+                {data[i]?.quantity} {data[i]?.type}
+              </h2>
             </div>
           </div>
         ))}
