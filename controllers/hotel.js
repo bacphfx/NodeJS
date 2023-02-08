@@ -62,19 +62,22 @@ exports.countByCity = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-exports.countByType = (req, res, next) => {
-  const types = ["hotel", "apartment", "resort", "villa", "cabin"];
+exports.countByType = async (req, res, next) => {
+  try {
+    const hotelQuantity = await Hotel.countDocuments({ type: "hotel" });
+    const apartmentQuantity = await Hotel.countDocuments({ type: "apartment" });
+    const resortQuantity = await Hotel.countDocuments({ type: "resort" });
+    const villaQuantity = await Hotel.countDocuments({ type: "villa" });
+    const cabinQuantity = await Hotel.countDocuments({ type: "cabin" });
 
-  Promise.all(
-    types.map((type) => {
-      return {
-        type: type.charAt(0).toUpperCase() + type.slice(1),
-        count: Hotel.countDocuments({ type: type })[0],
-      };
-    })
-  )
-    .then((type, count) => {
-      res.status(200).json(list);
-    })
-    .catch((err) => console.log(err));
+    res.status(200).json([
+      { type: "Hotels", quantity: hotelQuantity },
+      { type: "Apartments", quantity: apartmentQuantity },
+      { type: "Resorts", quantity: resortQuantity },
+      { type: "Villas", quantity: villaQuantity },
+      { type: "Cabins", quantity: cabinQuantity },
+    ]);
+  } catch (error) {
+    res.send(error);
+  }
 };
