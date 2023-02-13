@@ -1,17 +1,8 @@
-import { useState, useEffect } from "react";
-import axios from "../../util/axios";
+import useFetch from "../../hooks/useFetch";
 import "./propertyList.css";
 
 const PropertyList = () => {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const res = await axios.get("hotels/countByType");
-      setData(res.data);
-      return res;
-    }
-    fetchData();
-  }, []);
+  const { loading, data, error } = useFetch("/hotels/countByType");
 
   const images = [
     "https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=",
@@ -22,18 +13,24 @@ const PropertyList = () => {
   ];
   return (
     <div className="pList">
-      {data &&
-        images.map((img, i) => (
-          <div className="pListItem" key={i}>
-            <img src={img} alt="" className="pListImg" />
-            <div className="pListTitles">
-              <h1>{data[i]?.type}</h1>
-              <h2>
-                {data[i]?.quantity} {data[i]?.type}
-              </h2>
-            </div>
-          </div>
-        ))}
+      {loading ? (
+        "Loading"
+      ) : (
+        <>
+          {data &&
+            images.map((img, i) => (
+              <div className="pListItem" key={i}>
+                <img src={img} alt="" className="pListImg" />
+                <div className="pListTitles">
+                  <h1>{data[i]?.type}</h1>
+                  <h2>
+                    {data[i]?.quantity} {data[i]?.type}
+                  </h2>
+                </div>
+              </div>
+            ))}
+        </>
+      )}
     </div>
   );
 };
