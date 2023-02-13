@@ -41,9 +41,11 @@ exports.getHotel = (req, res, next) => {
 };
 
 exports.getHotels = (req, res, next) => {
-  Hotel.find().then((hotels) => {
-    return res.status(200).json(hotels);
-  });
+  Hotel.find(req.query)
+    .limit(req.query.limit)
+    .then((hotels) => {
+      return res.status(200).json(hotels);
+    });
 };
 
 exports.countByCity = (req, res, next) => {
@@ -77,6 +79,15 @@ exports.countByType = async (req, res, next) => {
       { type: "Villas", quantity: villaQuantity },
       { type: "Cabins", quantity: cabinQuantity },
     ]);
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+exports.sortByRating = async (req, res, next) => {
+  try {
+    const results = await Hotel.find().sort({ rating: -1 }).limit(3);
+    res.status(200).json(results);
   } catch (error) {
     res.send(error);
   }
