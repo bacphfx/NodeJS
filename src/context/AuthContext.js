@@ -1,43 +1,63 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 
 const { createContext } = require("react");
 
 const INITIAL_STATE = {
-  city: undefined,
-  date: [],
-  options: {
-    adult: undefined,
-    children: undefined,
-    room: undefined,
-  },
+  user: null,
+  loading: false,
+  error: null,
 };
 
-export const SearchContext = createContext(INITIAL_STATE);
+export const AuthContext = createContext(INITIAL_STATE);
 
-const SearchReducer = (state, action) => {
+const AuthReducer = (state, action) => {
   switch (action.type) {
-    case "NEW_SEARCH":
-      return action.payload;
-    case "RESET_SEARCH":
-      return INITIAL_STATE;
+    case "LOGIN_START":
+      return {
+        user: JSON.parse(localStorage.getItem("user")) || null,
+        loading: true,
+        error: null,
+      };
+    case "LOGIN_SUCCESS":
+      return {
+        user: action.payload,
+        loading: false,
+        error: null,
+      };
+    case "LOGIN_FAILE":
+      return {
+        user: null,
+        loading: false,
+        error: action.payload,
+      };
+    case "LOGOUT":
+      return {
+        user: null,
+        loading: false,
+        error: null,
+      };
     default:
       return state;
   }
 };
 
-export const SearchContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(SearchReducer, INITIAL_STATE);
+export const AuthContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
+
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(state.user));
+  }, [state.user]);
 
   return (
-    <SearchContext.Provider
+    <AuthContext.Provider
       value={{
-        city: state.city,
-        date: state.date,
-        options: state.options,
+        user: state.user,
+        loading: state.loading,
+        error: state.error,
         dispatch,
       }}
     >
       {children}
-    </SearchContext.Provider>
+    </AuthContext.Provider>
   );
 };
