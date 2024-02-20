@@ -32,7 +32,7 @@ const Hotel = () => {
   const navigate = useNavigate();
 
   const dayDifferent = (date1, date2) => {
-    const dayCount = Math.abs(date1.getDate() - date2.getDate());
+    const dayCount = Math.abs(date1.getDate() - date2.getDate()) + 1;
     return dayCount;
   };
   const days = dayDifferent(date[0]?.endDate, date[0]?.startDate);
@@ -133,17 +133,17 @@ const Hotel = () => {
                 <h1>Perfect for a {days}-night stay!</h1>
                 <span>
                   Located in the real heart of Krakow, this property has an
-                  excellent location score of 9.8!
+                  excellent location score of {data.rating}!
                 </span>
                 <h2>
                   <b>${days * data.cheapestPrice * options.room}</b> ({days}{" "}
-                  nights)
+                  nights, {options.room}-rooms)
                 </h2>
                 <button onClick={handleClick}>Reserve or Book Now!</button>
               </div>
             </div>
           </div>
-          {openReserve && <Reserve hotel={data} />}
+          {openReserve && <Reserve hotel={data} date={date} />}
           <MailList />
           <Footer />
         </div>

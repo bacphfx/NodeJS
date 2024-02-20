@@ -7,7 +7,9 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="navContainer">
-        <span className="logo">Booking Website</span>
+        <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
+          <span className="logo">Booking Website</span>
+        </Link>
         {user ? (
           user.username
         ) : (

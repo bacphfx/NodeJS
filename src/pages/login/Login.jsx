@@ -1,3 +1,4 @@
+import "./login.css";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -31,25 +32,25 @@ const Login = () => {
 
   return (
     <div className="login">
-      <div className="container">
+      <div className="lContainer">
         <input
           type="text"
-          id="username"
           placeholder="username"
+          id="username"
           onChange={handleChange}
-          className="input"
+          className="lInput"
         />
         <input
           type="password"
-          id="password"
           placeholder="password"
+          id="password"
           onChange={handleChange}
-          className="input"
+          className="lInput"
         />
-        <button className="button" onClick={handleClick}>
+        <button disabled={loading} onClick={handleClick} className="lButton">
           Login
         </button>
-        {error && <span>{error}</span>}
+        {error && <span>{error.message}</span>}
       </div>
     </div>
   );

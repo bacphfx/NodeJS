@@ -33,3 +33,60 @@
   padding: 10px;
   border-color: 1px solid lightgray;
 }
+
+.middle {
+  display: flex;
+  flex-direction: column;
+}
+
+.all-rooms {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.item {
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 60px;
+}
+
+.rItem {
+  width: 70%;
+}
+.lItem {
+  width: 20%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.room {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 10px;
+  color: gray;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+  gap: 300px;
+}
+
+.rButton {
+  border: none;
+  padding: 10px 20px;
+  background-color: #0071c2;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+}

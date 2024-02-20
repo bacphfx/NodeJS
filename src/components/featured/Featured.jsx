@@ -26,7 +26,7 @@ const Featured = () => {
 
           <div className="featuredItem">
             <img
-              src="https://dulichmte.vn/wp-content/uploads/2021/01/MTE.hochiminhcity.3.jpg"
+              src="https://hnm.1cdn.vn/2023/12/12/a355.jpg"
               alt=""
               className="featuredImg"
             />
