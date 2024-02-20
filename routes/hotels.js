@@ -8,6 +8,7 @@ const {
   countByCity,
   countByType,
   sortByRating,
+  getHotelRooms,
 } = require("../controllers/hotel");
 const { verifyAdmin } = require("../middleware/auth");
 const router = express.Router();
@@ -32,5 +33,7 @@ router.get("/countByCity", countByCity);
 router.get("/countByType", countByType);
 
 router.get("/sortByRating", sortByRating);
+
+router.get("/room/:id", getHotelRooms);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const Hotel = require("../models/Hotel");
+const Room = require("../models/Room");
 
 exports.createHotel = (req, res, next) => {
   const newHotel = new Hotel(req.body);
@@ -41,7 +42,8 @@ exports.getHotel = (req, res, next) => {
 };
 
 exports.getHotels = (req, res, next) => {
-  Hotel.find(req.query)
+  const { min, max, ...other } = req.query;
+  Hotel.find({ ...other, cheapestPrice: { $gt: min | 1, $lt: max || 999 } })
     .limit(req.query.limit)
     .then((hotels) => {
       return res.status(200).json(hotels);
@@ -88,6 +90,20 @@ exports.sortByRating = async (req, res, next) => {
   try {
     const results = await Hotel.find().sort({ rating: -1 }).limit(3);
     res.status(200).json(results);
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+exports.getHotelRooms = async (req, res, next) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    const list = await Promise.all(
+      hotel.rooms.map((room) => {
+        return Room.findById(room);
+      })
+    );
+    res.status(200).json(list);
   } catch (error) {
     res.send(error);
   }
