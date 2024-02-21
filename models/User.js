@@ -8,6 +8,16 @@ const userSchema = new Schema({
     require: true,
     unique: true,
   },
+  fullname: {
+    type: String,
+    require: true,
+    unique: true,
+  },
+  phoneNumber: {
+    type: String,
+    require: true,
+    unique: true,
+  },
   email: {
     type: String,
     require: true,
@@ -21,6 +31,7 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  transactions: [String],
 });
 
 module.exports = mongoose.model("user", userSchema);

@@ -30,6 +30,21 @@ exports.updateRoom = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+exports.updateRoomAvailable = (req, res, next) => {
+  Room.updateOne(
+    { "roomNumbers._id": req.params.id },
+    {
+      $push: {
+        "roomNumbers.$.unavailableDates": req.body.dates,
+      },
+    }
+  )
+    .then(() => {
+      res.status(200).json("Room status has been updated");
+    })
+    .catch((err) => console.log(err));
+};
+
 exports.deleteRoom = (req, res, next) => {
   const hotelId = req.params.hotelId;
   Room.findByIdAndDelete(req.params.roomId)

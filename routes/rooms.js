@@ -5,6 +5,7 @@ const {
   deleteRoom,
   getRoom,
   getRooms,
+  updateRoomAvailable,
 } = require("../controllers/room");
 const { verifyAdmin } = require("../middleware/auth");
 const router = express.Router();
@@ -14,6 +15,7 @@ router.post("/:hotelId", verifyAdmin, createRoom);
 
 // UPDATE
 router.put("/:roomId", verifyAdmin, updateRoom);
+router.put("/available/:id", updateRoomAvailable);
 
 // DELETE
 router.delete("/:roomId/:hotelId", verifyAdmin, deleteRoom);
