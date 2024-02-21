@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { DateRange } from "react-date-range";
 import "./reserve.css";
 import { useLocation } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 const Reserve = ({ hotel, date }) => {
   const [dates, setDates] = useState(date);
   const { data, loading, error } = useFetch(`hotels/room/${hotel._id}`);
   const [selectedRooms, setSelectedRooms] = useState([]);
+  const [method, setMethod] = useState();
+  const { user } = useContext(AuthContext);
 
   const getDatesInRange = (startDate, endDate) => {
     const start = new Date(startDate);
@@ -23,6 +27,11 @@ const Reserve = ({ hotel, date }) => {
   };
 
   const allDates = getDatesInRange(dates[0].startDate, dates[0].endDate);
+
+  const [transaction, setTransaction] = useState({
+    user: user?.username,
+    hotel: hotel._id,
+  });
 
   const isAvailable = (roomNumber) => {
     const isFound = roomNumber.unavailableDates.some((date) =>
@@ -41,7 +50,39 @@ const Reserve = ({ hotel, date }) => {
         : selectedRooms.filter((item) => item !== value)
     );
   };
-  const handleClick = () => {};
+
+  const handleChange = (e) => {
+    setMethod(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await Promise.all(
+        selectedRooms.map((roomId) => {
+          axios.put(`http://localhost:5000/api/rooms/available/${roomId}`, {
+            dates: allDates,
+          });
+        })
+      );
+      setTransaction((prev) => ({
+        ...prev,
+        room: selectedRooms,
+        dateStart: dates[0].startDate,
+        dateEnd: dates[0].endDate,
+        price: hotel.cheapestPrice * selectedRooms.length * allDates.length,
+        method: method,
+      }));
+
+      const res = await axios.post(
+        `http://localhost:5000/api/transactions/${user._id}`,
+        transaction
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="reserve">
       <div className="top">
@@ -62,15 +103,19 @@ const Reserve = ({ hotel, date }) => {
             <input
               className="input"
               type="text"
-              placeholder="Full name"
+              placeholder={user.fullname}
             ></input>
             <label>Your email:</label>
-            <input className="input" type="email" placeholder="Email"></input>
+            <input
+              className="input"
+              type="email"
+              placeholder={user.email}
+            ></input>
             <label>Your phone number:</label>
             <input
               className="input"
               type="text"
-              placeholder="Phone number"
+              placeholder={user.phoneNumber}
             ></input>
             <label>Your identity card number:</label>
             <input
@@ -116,8 +161,13 @@ const Reserve = ({ hotel, date }) => {
             Total Bill: $
             {hotel.cheapestPrice * selectedRooms.length * allDates.length}
           </h2>
+          <select onChange={handleChange}>
+            <option disabled="disable">Select Payment Method</option>
+            <option>Credit Card</option>
+            <option>Cash</option>
+          </select>
         </div>
-        <button onClick={handleClick} className="rButton">
+        <button onClick={handleSubmit} className="rButton">
           Reserve Now
         </button>
       </div>
