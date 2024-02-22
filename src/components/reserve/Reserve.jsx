@@ -1,16 +1,17 @@
 import React, { useContext, useState } from "react";
 import { DateRange } from "react-date-range";
 import "./reserve.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
 const Reserve = ({ hotel, date }) => {
+  const navigate = useNavigate();
   const [dates, setDates] = useState(date);
   const { data, loading, error } = useFetch(`hotels/room/${hotel._id}`);
   const [selectedRooms, setSelectedRooms] = useState([]);
-  const [method, setMethod] = useState();
+  const [method, setMethod] = useState("Cash");
   const { user } = useContext(AuthContext);
 
   const getDatesInRange = (startDate, endDate) => {
@@ -58,26 +59,25 @@ const Reserve = ({ hotel, date }) => {
   const handleSubmit = async () => {
     try {
       await Promise.all(
-        selectedRooms.map((roomId) => {
-          axios.put(`http://localhost:5000/api/rooms/available/${roomId}`, {
+        selectedRooms.map((number) => {
+          axios.put(`http://localhost:5000/api/rooms/available/${number}`, {
             dates: allDates,
           });
         })
       );
-      setTransaction((prev) => ({
-        ...prev,
-        room: selectedRooms,
-        dateStart: dates[0].startDate,
-        dateEnd: dates[0].endDate,
-        price: hotel.cheapestPrice * selectedRooms.length * allDates.length,
-        method: method,
-      }));
+
+      transaction.room = selectedRooms;
+      transaction.dateStart = dates[0].startDate;
+      transaction.dateEnd = dates[0].endDate;
+      transaction.price =
+        hotel.cheapestPrice * selectedRooms.length * allDates.length;
+      transaction.payment = method;
 
       const res = await axios.post(
         `http://localhost:5000/api/transactions/${user._id}`,
         transaction
       );
-      return res.data;
+      navigate("/transaction");
     } catch (error) {
       console.log(error);
     }
@@ -129,8 +129,8 @@ const Reserve = ({ hotel, date }) => {
       <div className="middle">
         <h2>Select Rooms</h2>
         <div className="all-rooms">
-          {data.map((item) => (
-            <div className="item">
+          {data.map((item, key) => (
+            <div className="item" key={key}>
               <div className="rItem">
                 <h4>{item.title}</h4>
                 <p>{item.desc}</p>
@@ -143,7 +143,7 @@ const Reserve = ({ hotel, date }) => {
                     <label>{roomNumber.number}</label>
                     <input
                       type="checkbox"
-                      value={roomNumber._id}
+                      value={roomNumber.number}
                       onChange={handleSelect}
                       disabled={!isAvailable(roomNumber)}
                     />
@@ -161,10 +161,10 @@ const Reserve = ({ hotel, date }) => {
             Total Bill: $
             {hotel.cheapestPrice * selectedRooms.length * allDates.length}
           </h2>
+          <label>Select Payment Method: </label>
           <select onChange={handleChange}>
-            <option disabled="disable">Select Payment Method</option>
-            <option>Credit Card</option>
             <option>Cash</option>
+            <option>Credit Card</option>
           </select>
         </div>
         <button onClick={handleSubmit} className="rButton">

@@ -11,7 +11,12 @@ const Navbar = () => {
           <span className="logo">Booking Website</span>
         </Link>
         {user ? (
-          user.username
+          <div className="navItems">
+            <span>{user.username}</span>
+            <Link to="/transaction">
+              <button className="navButton">Transaction</button>
+            </Link>
+          </div>
         ) : (
           <div className="navItems">
             <Link to="/register">
