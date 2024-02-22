@@ -30,7 +30,7 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    console.log(user);
+    // console.log(user);
     if (!user) {
       return res.status(404).send("User not found!");
     }

@@ -28,6 +28,7 @@ const transactionSchema = new Schema({
     type: String,
     default: "Booked",
   },
+  price: Number,
 });
 
 module.exports = mongoose.model("transaction", transactionSchema);

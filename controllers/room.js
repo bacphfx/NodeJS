@@ -32,7 +32,7 @@ exports.updateRoom = (req, res, next) => {
 
 exports.updateRoomAvailable = (req, res, next) => {
   Room.updateOne(
-    { "roomNumbers._id": req.params.id },
+    { "roomNumbers.number": req.params.number },
     {
       $push: {
         "roomNumbers.$.unavailableDates": req.body.dates,

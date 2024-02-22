@@ -25,12 +25,13 @@ exports.getAllTransactions = (req, res, next) => {
 exports.getUserTransactions = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
-    const list = await Promise.all(
+    const list1 = await Promise.all(
       user.transactions.map((transactionId) => {
         return Transaction.findById(transactionId);
       })
     );
-    res.status(200).json(list);
+
+    res.status(200).json(list1);
   } catch (error) {
     res.send(error);
   }
