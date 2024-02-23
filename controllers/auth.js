@@ -13,14 +13,11 @@ exports.register = async (req, res, next) => {
     const hash = await bcrypt.hash(password, 12);
 
     const user = new User({
-      username: username,
-      email: email,
+      ...req.body,
       password: hash,
-      fullname: fullname,
-      phoneNumber: phoneNumber,
     });
     await user.save();
-    console.log(register);
+    console.log(user);
     res.status(200).json("User has been created!");
   } catch (error) {
     res.send(error);
@@ -32,12 +29,12 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ username: req.body.username });
     // console.log(user);
     if (!user) {
-      return res.status(404).send("User not found!");
+      return res.status(404).json({ message: "User not found!" });
     }
 
     const doMatch = await bcrypt.compare(req.body.password, user.password);
     if (!doMatch) {
-      return res.status(404).send("Wrong password or username!");
+      return res.status(404).json({ message: "Wrong password or username!" });
     }
     req.session.isAuth = true;
     req.session.userId = user._id;

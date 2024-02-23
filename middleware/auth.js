@@ -8,6 +8,7 @@ exports.verifyLogin = (req, res, next) => {
     if (!user) {
       return res.status(401).send("You are not authenticated!");
     }
+    console.log(user);
     req.user = user;
     next();
   });
@@ -28,6 +29,7 @@ exports.verifyUser = (req, res, next) => {
 
 exports.verifyAdmin = (req, res, next) => {
   this.verifyLogin(req, res, () => {
+    console.log(req.user);
     if (req.user.isAdmin) {
       next();
     } else {
