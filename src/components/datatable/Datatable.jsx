@@ -11,14 +11,20 @@ const Datatable = ({ columns }) => {
   const [list, setList] = useState([]);
   const { data } = useFetch(`/${path}`);
 
+  // reFetch();
   useEffect(() => {
     setList(data);
   }, [data]);
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/${path}/${id}`);
-      setList(list.filter((item) => item._id !== id));
+      const confirm = window.confirm("Are you sure?");
+      if (confirm) {
+        await axios.delete(`/${path}/${id}`);
+        setList(list.filter((item) => item._id !== id));
+      } else {
+        return;
+      }
     } catch (error) {}
   };
 
@@ -30,9 +36,6 @@ const Datatable = ({ columns }) => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link>
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row._id)}

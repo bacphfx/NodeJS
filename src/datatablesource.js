@@ -21,13 +21,6 @@ export const userColumns = [
     field: "fullname",
     headerName: "Fullname",
     width: 200,
-    // renderCell: (params) => {
-    //   return (
-    //     <div className={`cellWithStatus ${params.row.isAdmin}`}>
-    //       {params.row.isAdmin}
-    //     </div>
-    //   );
-    // },
   },
   {
     field: "email",
@@ -67,16 +60,16 @@ export const hotelColumns = [
 ];
 
 export const roomColumns = [
-  { field: "_id", headerName: "ID", width: 70 },
+  { field: "_id", headerName: "ID", width: 250 },
   {
     field: "title",
     headerName: "Title",
-    width: 230,
+    width: 250,
   },
   {
     field: "desc",
     headerName: "Description",
-    width: 200,
+    width: 350,
   },
   {
     field: "price",
@@ -86,6 +79,45 @@ export const roomColumns = [
   {
     field: "maxPeople",
     headerName: "Max People",
+    width: 100,
+  },
+];
+
+export const transactionColumns = [
+  { field: "_id", headerName: "ID", width: 150 },
+  {
+    field: "user",
+    headerName: "User",
+    width: 150,
+  },
+  {
+    field: "hotel",
+    headerName: "Hotel",
+    width: 300,
+  },
+  {
+    field: "room",
+    headerName: "Room",
+    width: 150,
+  },
+  {
+    field: "date",
+    headerName: "Date",
+    width: 250,
+  },
+  {
+    field: "price",
+    headerName: "price",
+    width: 100,
+  },
+  {
+    field: "payment",
+    headerName: "Payment Method",
+    width: 150,
+  },
+  {
+    field: "status",
+    headerName: "Status",
     width: 100,
   },
 ];
