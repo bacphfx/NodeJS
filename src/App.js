@@ -5,7 +5,7 @@ import New from "./pages/newUser/NewUser";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { hotelInputs, roomInputs, userInputs } from "./formSource";
 import "./style/dark.scss";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "./context/AuthContext";
 import {
   hotelColumns,
@@ -15,8 +15,11 @@ import {
 } from "./datatablesource";
 import NewHotel from "./pages/newHotel/NewHotel";
 import NewRoom from "./pages/newRoom/NewRoom";
+import Transaction from "./pages/transaction/Transaction";
+import useFetch from "./hooks/useFetch";
 
 function App() {
+  const { data, error, loading } = useFetch(`/transactions`);
   const ProtectedRoute = ({ children }) => {
     const { user } = useContext(AuthContext);
     if (!user) {
@@ -35,7 +38,7 @@ function App() {
               index
               element={
                 <ProtectedRoute>
-                  <Home columns={transactionColumns} />
+                  <Home transactions={data.slice(0, 8)} />
                 </ProtectedRoute>
               }
             />
@@ -89,6 +92,16 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <NewRoom inputs={roomInputs} title="Add New Room" />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+            <Route path="transactions">
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <Transaction transactions={data} />
                   </ProtectedRoute>
                 }
               />

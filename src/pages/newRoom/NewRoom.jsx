@@ -12,6 +12,38 @@ const NewRoom = ({ inputs, title }) => {
   const [hotelId, setHotelId] = useState(undefined);
   const [rooms, setRooms] = useState(undefined);
   const { data, loading, error } = useFetch("/hotels");
+  const [errors, setErrors] = useState({});
+
+  const handleValidation = () => {
+    const formFields = { ...info };
+    const formErrors = {};
+    let formIsValid = true;
+
+    if (!formFields["title"]) {
+      formIsValid = false;
+      formErrors["title"] = "Cannot be empty";
+    }
+    if (!formFields["description"]) {
+      formIsValid = false;
+      formErrors["description"] = "Cannot be empty";
+    }
+    if (!formFields["price"]) {
+      formIsValid = false;
+      formErrors["price"] = "Cannot be empty";
+    }
+    if (!formFields["maxPeople"]) {
+      formIsValid = false;
+      formErrors["maxPeople"] = "Cannot be empty";
+    }
+
+    if (!rooms) {
+      formIsValid = false;
+      formErrors["rooms"] = "Cannot be empty";
+    }
+
+    setErrors(formErrors);
+    return formIsValid;
+  };
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -19,12 +51,15 @@ const NewRoom = ({ inputs, title }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const roomNumbers = rooms.split(",").map((room) => ({ number: room }));
-    console.log(roomNumbers);
-    try {
-      await axios.post(`/rooms/${hotelId}`, { ...info, roomNumbers });
-      navigate("/rooms");
-    } catch (error) {}
+    if (handleValidation()) {
+      const roomNumbers = rooms.split(",").map((room) => ({ number: room }));
+      try {
+        await axios.post(`/rooms/${hotelId}`, { ...info, roomNumbers });
+        navigate("/rooms");
+      } catch (error) {}
+    } else {
+      return;
+    }
   };
   return (
     <div className="new">
@@ -46,6 +81,7 @@ const NewRoom = ({ inputs, title }) => {
                     type={input.type}
                     placeholder={input.placeholder}
                   />
+                  <span className="error">{errors[input.id]}</span>
                 </div>
               ))}
               <div className="formInput">
@@ -54,6 +90,7 @@ const NewRoom = ({ inputs, title }) => {
                   onChange={(e) => setRooms(e.target.value)}
                   placeholder="give comma between room numbers."
                 />
+                <span className="error">{errors["rooms"]}</span>
               </div>
               <div className="formInput">
                 <label>Choose a hotel</label>

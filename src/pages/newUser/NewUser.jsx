@@ -8,16 +8,51 @@ import { useNavigate } from "react-router-dom";
 const New = ({ inputs, title }) => {
   const navigate = useNavigate();
   const [info, setInfo] = useState({});
+  const [errors, setErrors] = useState({});
+
+  const handleValidation = () => {
+    const formFields = { ...info };
+    const formErrors = {};
+    let formIsValid = true;
+
+    if (!formFields["username"]) {
+      formIsValid = false;
+      formErrors["username"] = "Cannot be empty";
+    }
+    if (!formFields["fullname"]) {
+      formIsValid = false;
+      formErrors["fullname"] = "Cannot be empty";
+    }
+    if (!formFields["email"]) {
+      formIsValid = false;
+      formErrors["email"] = "Cannot be empty";
+    }
+    if (!formFields["phoneNumber"]) {
+      formIsValid = false;
+      formErrors["phoneNumber"] = "Cannot be empty";
+    }
+    if (!formFields["password"]) {
+      formIsValid = false;
+      formErrors["password"] = "Cannot be empty";
+    }
+
+    setErrors(formErrors);
+    return formIsValid;
+  };
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
   const handleClick = async (e) => {
     e.preventDefault();
-    try {
-      await axios.post("/auth/register", info);
-      navigate("/users");
-    } catch (error) {}
+    if (handleValidation()) {
+      try {
+        await axios.post("/auth/register", info);
+        navigate("/users");
+      } catch (error) {}
+    } else {
+      return;
+    }
   };
   return (
     <div className="new">
@@ -39,6 +74,7 @@ const New = ({ inputs, title }) => {
                     type={input.type}
                     placeholder={input.placeholder}
                   />
+                  <span className="error">{errors[input.id]}</span>
                 </div>
               ))}
               <button onClick={handleClick}>Send</button>

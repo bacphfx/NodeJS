@@ -16,16 +16,19 @@ const Datatable = ({ columns }) => {
     setList(data);
   }, [data]);
 
+  console.log(list);
   const handleDelete = async (id) => {
     try {
       const confirm = window.confirm("Are you sure?");
       if (confirm) {
-        await axios.delete(`/${path}/${id}`);
+        const res = await axios.delete(`/${path}/${id}`);
         setList(list.filter((item) => item._id !== id));
       } else {
         return;
       }
-    } catch (error) {}
+    } catch (error) {
+      window.alert(error.response.data);
+    }
   };
 
   const actionColumn = [
@@ -51,9 +54,13 @@ const Datatable = ({ columns }) => {
     <div className="datatable">
       <div className="datatableTitle">
         {path.charAt(0).toUpperCase() + path.slice(1)}
-        <Link to={`/${path}/new`} className="link">
-          Add New
-        </Link>
+        {path === "transactions" ? (
+          <></>
+        ) : (
+          <Link to={`/${path}/new`} className="link">
+            Add New
+          </Link>
+        )}
       </div>
       <DataGrid
         className="datagrid"

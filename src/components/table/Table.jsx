@@ -9,15 +9,7 @@ import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 
-const List = () => {
-  const [transactions, setTransactions] = useState([]);
-  const { data, error, loading } = useFetch(`/transactions`);
-
-  useEffect(() => {
-    setTransactions(data);
-  }, [data]);
-  console.log(transactions);
-
+const List = ({ transactions }) => {
   const HotelName = ({ hotelId }) => {
     const [name, setName] = useState();
     const { data } = useFetch(`/hotels/find/${hotelId}`);

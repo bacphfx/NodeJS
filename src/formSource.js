@@ -79,12 +79,12 @@ export const hotelInputs = [
     type: "text",
     placeholder: "100",
   },
-  {
-    id: "photos",
-    label: "Images",
-    type: "textarea",
-    row: 10,
-  },
+  // {
+  //   id: "photos",
+  //   label: "Images",
+  //   type: "textarea",
+  //   row: 10,
+  // },
 ];
 
 export const roomInputs = [
