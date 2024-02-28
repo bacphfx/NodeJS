@@ -13,6 +13,7 @@ const Reserve = ({ hotel, date }) => {
   const [selectedRooms, setSelectedRooms] = useState([]);
   const [method, setMethod] = useState("Cash");
   const { user } = useContext(AuthContext);
+  console.log(selectedRooms.map((i) => i.number));
 
   const getDatesInRange = (startDate, endDate) => {
     const start = new Date(startDate);
@@ -44,7 +45,8 @@ const Reserve = ({ hotel, date }) => {
 
   const handleSelect = (e) => {
     const checked = e.target.checked;
-    const value = e.target.value;
+    const value = JSON.parse(e.target.value);
+
     setSelectedRooms(
       checked
         ? [...selectedRooms, value]
@@ -59,14 +61,14 @@ const Reserve = ({ hotel, date }) => {
   const handleSubmit = async () => {
     try {
       await Promise.all(
-        selectedRooms.map((number) => {
-          axios.put(`http://localhost:5000/api/rooms/available/${number}`, {
+        selectedRooms.map((i) => {
+          axios.put(`http://localhost:5000/api/rooms/available/${i._id}`, {
             dates: allDates,
           });
         })
       );
 
-      transaction.room = selectedRooms;
+      transaction.room = selectedRooms.map((i) => i.number);
       transaction.dateStart = dates[0].startDate;
       transaction.dateEnd = dates[0].endDate;
       transaction.price =
@@ -143,7 +145,7 @@ const Reserve = ({ hotel, date }) => {
                     <label>{roomNumber.number}</label>
                     <input
                       type="checkbox"
-                      value={roomNumber.number}
+                      value={JSON.stringify(roomNumber)}
                       onChange={handleSelect}
                       disabled={!isAvailable(roomNumber)}
                     />

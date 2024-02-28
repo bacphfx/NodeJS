@@ -27,6 +27,7 @@ const Transaction = () => {
 
     return <span>{name}</span>;
   };
+  console.log(transactions);
 
   return (
     <div>
@@ -52,7 +53,7 @@ const Transaction = () => {
                 <tr key={key}>
                   <td>{key + 1}</td>
                   <td>
-                    <HotelName hotelId={val.hotel} />
+                    <HotelName hotelId={val?.hotel} />
                   </td>
                   <td>{val.room.join(", ")}</td>
                   <td>

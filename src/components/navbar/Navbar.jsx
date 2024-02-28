@@ -3,7 +3,12 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import "./navbar.css";
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading, error, dispatch } = useContext(AuthContext);
+  const {} = useContext(AuthContext);
+  const logout = async (e) => {
+    e.preventDefault();
+    dispatch({ type: "LOGOUT" });
+  };
   return (
     <div className="navbar">
       <div className="navContainer">
@@ -16,6 +21,9 @@ const Navbar = () => {
             <Link to="/transaction">
               <button className="navButton">Transaction</button>
             </Link>
+            <button className="navButton" onClick={logout}>
+              Log Out
+            </button>
           </div>
         ) : (
           <div className="navItems">
