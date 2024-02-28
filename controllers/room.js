@@ -32,7 +32,7 @@ exports.updateRoom = (req, res, next) => {
 
 exports.updateRoomAvailable = (req, res, next) => {
   Room.updateOne(
-    { "roomNumbers.number": req.params.number },
+    { "roomNumbers._id": req.params.id },
     {
       $push: {
         "roomNumbers.$.unavailableDates": req.body.dates,
@@ -46,14 +46,23 @@ exports.updateRoomAvailable = (req, res, next) => {
 };
 
 exports.deleteRoom = (req, res, next) => {
-  const hotelId = req.params.hotelId;
-  Room.findByIdAndDelete(req.params.roomId)
-    .then(() => {
-      Hotel.findByIdAndUpdate(hotelId, { $pull: { rooms: req.params.roomId } })
-        .then(() => {
-          res.status(200).json("Room has been deleted!");
-        })
-        .catch((err) => console.log(err));
+  Room.findById(req.params.roomId)
+    .then((room) => {
+      const isEmpty = room.roomNumbers.some(
+        (number) => number.unavailableDates.length == 0
+      );
+      console.log(isEmpty);
+      if (isEmpty) {
+        Room.findByIdAndDelete(req.params.roomId)
+          .then(() => {
+            res.status(200).json("Room has been deleted!");
+          })
+          .catch((err) => console.log(err));
+      } else {
+        res
+          .status(400)
+          .json("Room is now in a transaction and cannot be deleted!");
+      }
     })
     .catch((err) => console.log(err));
 };

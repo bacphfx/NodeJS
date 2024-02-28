@@ -17,21 +17,23 @@ exports.createTransaction = async (req, res, next) => {
 };
 
 exports.getAllTransactions = (req, res, next) => {
-  Transaction.find().then((transactions) => {
-    return res.status(200).json(transactions);
-  });
+  Transaction.find()
+    .sort([["_id", -1]])
+    .then((transactions) => {
+      return res.status(200).json(transactions);
+    });
 };
 
 exports.getUserTransactions = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
-    const list1 = await Promise.all(
+    const list = await Promise.all(
       user.transactions.map((transactionId) => {
         return Transaction.findById(transactionId);
       })
     );
 
-    res.status(200).json(list1);
+    res.status(200).json(list);
   } catch (error) {
     res.send(error);
   }

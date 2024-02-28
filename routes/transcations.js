@@ -11,13 +11,6 @@ const router = express.Router();
 // CREATE
 router.post("/:userId", createTransaction);
 
-// UPDATE
-// router.put("/:roomId", verifyAdmin, updateRoom);
-// router.put("/available/:id", updateRoomAvailable);
-
-// DELETE
-// router.delete("/:roomId/:hotelId", verifyAdmin, deleteRoom);
-
 // GET USER TRANSCATIONS
 router.get("/:userId", getUserTransactions);
 

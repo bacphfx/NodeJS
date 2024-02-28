@@ -11,14 +11,14 @@ const { verifyAdmin } = require("../middleware/auth");
 const router = express.Router();
 
 // CREATE
-router.post("/:hotelId", verifyAdmin, createRoom);
+router.post("/:hotelId", createRoom);
 
 // UPDATE
-router.put("/:roomId", verifyAdmin, updateRoom);
-router.put("/available/:number", updateRoomAvailable);
+router.put("/:roomId", updateRoom);
+router.put("/available/:id", updateRoomAvailable);
 
 // DELETE
-router.delete("/:roomId/:hotelId", verifyAdmin, deleteRoom);
+router.delete("/:roomId/", deleteRoom);
 
 // GET
 router.get("/:roomId", getRoom);

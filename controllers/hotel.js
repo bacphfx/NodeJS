@@ -1,5 +1,6 @@
 const Hotel = require("../models/Hotel");
 const Room = require("../models/Room");
+const Transaction = require("../models/Transaction");
 
 exports.createHotel = (req, res, next) => {
   const newHotel = new Hotel(req.body);
@@ -26,9 +27,17 @@ exports.updateHotel = (req, res, next) => {
 };
 
 exports.deleteHotel = (req, res, next) => {
-  Hotel.findByIdAndDelete(req.params.id)
-    .then(() => {
-      res.status(200).json("Hotel has been deleted!");
+  Transaction.findOne({ hotel: req.params.id })
+    .then((transaction) => {
+      if (transaction) {
+        res
+          .status(400)
+          .json("Hotel is now in a transaction, cannot be deleted!");
+      } else {
+        Hotel.findByIdAndDelete(req.params.id).then(() => {
+          res.status(200).json("Hotel has been deleted!");
+        });
+      }
     })
     .catch((err) => console.log(err));
 };
