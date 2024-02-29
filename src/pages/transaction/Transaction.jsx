@@ -6,13 +6,11 @@ import Footer from "../../components/footer/Footer";
 import "./transaction.css";
 import useFetch from "../../hooks/useFetch";
 import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 const Transaction = () => {
-  const navigate = useNavigate();
   const [transactions, setTransactions] = useState();
   const { user } = useContext(AuthContext);
-  const { data, error, loading } = useFetch(`/transactions/${user._id}`);
+  const { data } = useFetch(`/transactions/${user._id}`);
 
   useEffect(() => {
     setTransactions(data);
@@ -24,10 +22,8 @@ const Transaction = () => {
     useEffect(() => {
       setName(data?.title);
     }, [data]);
-
     return <span>{name}</span>;
   };
-  console.log(transactions);
 
   return (
     <div>
@@ -69,7 +65,6 @@ const Transaction = () => {
           </tbody>
         </table>
       </div>
-
       <MailList />
       <Footer />
     </div>

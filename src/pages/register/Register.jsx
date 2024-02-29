@@ -1,7 +1,6 @@
 import "./register.css";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
 import axios from "../../util/axios";
 
 const Register = () => {
@@ -22,9 +21,9 @@ const Register = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/auth/register", credentials);
-
-      // navigate("/login");
+      await axios.post("/auth/register", credentials);
+      window.alert("Register successfully!");
+      navigate("/login");
     } catch (error) {
       setError(error.response.data);
     }

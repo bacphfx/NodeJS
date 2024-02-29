@@ -3,7 +3,7 @@ import useFetch from "../../hooks/useFetch";
 import "./featuredProperties.css";
 
 const FeaturedProperties = () => {
-  const { loading, data, error } = useFetch("/hotels/sortByRating");
+  const { loading, data } = useFetch("/hotels/sortByRating");
 
   return (
     <div className="fp">
@@ -14,11 +14,9 @@ const FeaturedProperties = () => {
           {data.map((item) => (
             <div className="fpItem" key={item._id}>
               <img src={item.photos[0]} alt="" className="fpImg" />
-              <span className="fpName">
-                <a href={`/hotels/${item._id}`} target="_blank">
-                  {item.name}
-                </a>
-              </span>
+              <Link to={`/hotels/${item._id}`}>
+                <span className="fpName">{item.name}</span>
+              </Link>
               <span className="fpCity">{item.city}</span>
               <span className="fpPrice">
                 Starting from ${item.cheapestPrice}

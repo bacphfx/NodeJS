@@ -1,13 +1,14 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import "./navbar.css";
 const Navbar = () => {
-  const { user, loading, error, dispatch } = useContext(AuthContext);
-  const {} = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { user, dispatch } = useContext(AuthContext);
   const logout = async (e) => {
     e.preventDefault();
     dispatch({ type: "LOGOUT" });
+    navigate("/login");
   };
   return (
     <div className="navbar">

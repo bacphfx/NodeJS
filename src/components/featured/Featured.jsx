@@ -2,7 +2,7 @@ import useFetch from "../../hooks/useFetch";
 import "./featured.css";
 
 const Featured = () => {
-  const { loading, data, error } = useFetch(
+  const { loading, data } = useFetch(
     "/hotels/countByCity?cities=Ha_Noi,Ho_Chi_Minh,Da_Nang"
   );
 

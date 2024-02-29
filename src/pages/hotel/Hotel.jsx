@@ -25,17 +25,20 @@ const Hotel = () => {
   const [open, setOpen] = useState(false);
   const [openReserve, setOpenReserve] = useState(false);
 
-  const { loading, data, error, reFetch } = useFetch(`/hotels/find/${id}`);
+  const { loading, data } = useFetch(`/hotels/find/${id}`);
 
   const { date, options } = useContext(SearchContext);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const dayDifferent = (date1, date2) => {
-    const dayCount = Math.abs(date1.getDate() - date2.getDate()) + 1;
+    const dayCount = Math.abs(date1 - date2) + 1;
     return dayCount;
   };
-  const days = dayDifferent(date[0]?.endDate, date[0]?.startDate);
+  const days = dayDifferent(
+    date[0]?.endDate.getDate() || Date.now(),
+    date[0]?.startDate.getDate() || Date.now()
+  );
 
   const handleOpen = (i) => {
     setSlideNumber(i);
