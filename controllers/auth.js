@@ -72,3 +72,25 @@ exports.login = (req, res, next) => {
       next(err);
     });
 };
+
+exports.getuser = (req, res, next) => {
+  const userId = req.params.userId;
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        const error = new Error("Could not find user");
+        error.statusCode = 404;
+        throw error;
+      }
+      const { password, ...otherDetail } = user._doc;
+      res
+        .status(200)
+        .json({ message: "Fetch user sucessfully", user: otherDetail });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};

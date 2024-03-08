@@ -47,7 +47,6 @@ exports.createPost = (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
   let creator;
-  console.log(req.userId);
   const post = new Post({
     title: title,
     content: content,
@@ -170,9 +169,15 @@ exports.deletePost = (req, res, next) => {
       return Post.findByIdAndDelete(postId);
     })
     .then((result) => {
-      console.log(result);
+      return User.findById(req.userId);
+    })
+    .then((user) => {
+      user.post.pull(postId);
+      return user.save();
+    })
+    .then((result) => {
       res.status(200).json({
-        message: "Post deleted!",
+        message: "Deleted post.",
       });
     })
     .catch((err) => {
