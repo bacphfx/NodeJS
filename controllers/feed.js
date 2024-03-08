@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { validationResult } = require("express-validator/check");
 const Post = require("../models/post");
+const User = require("../models/user");
 
 exports.getPosts = (req, res, next) => {
   const currentPage = req.query.page || 1;
@@ -16,13 +17,11 @@ exports.getPosts = (req, res, next) => {
         .limit(perPage);
     })
     .then((posts) => {
-      return res
-        .status(200)
-        .json({
-          message: "Fetched posts successfully.",
-          posts: posts,
-          totalItems: totalItems,
-        });
+      return res.status(200).json({
+        message: "Fetched posts successfully.",
+        posts: posts,
+        totalItems: totalItems,
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -47,21 +46,27 @@ exports.createPost = (req, res, next) => {
   const imageUrl = req.file.path.replace("\\", "/");
   const title = req.body.title;
   const content = req.body.content;
+  let creator;
+  console.log(req.userId);
   const post = new Post({
     title: title,
     content: content,
     imageUrl: imageUrl,
-    creator: {
-      name: "Bac Pham",
-    },
+    creator: req.userId,
   });
   post
     .save()
     .then((result) => {
-      console.log(result);
-      return res.status(201).json({
-        message: "Post created successfully!",
-        post: result,
+      return User.findById(req.userId).then((user) => {
+        creator = user;
+        user.post.push(result._id);
+        return user.save().then(() => {
+          return res.status(201).json({
+            message: "Post created successfully!",
+            post: result,
+            creator: { _id: creator._id, name: creator.name },
+          });
+        });
       });
     })
     .catch((err) => {
@@ -120,6 +125,11 @@ exports.updatePost = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
+      if (post.creator.toString() != req.userId) {
+        const error = new Error("Not authorization.");
+        error.statusCode = 403;
+        throw error;
+      }
       if (imageUrl !== post.imageUrl) {
         clearImage(post.imageUrl);
       }
@@ -149,6 +159,11 @@ exports.deletePost = (req, res, next) => {
       if (!post) {
         const error = new Error("Could not find posts");
         error.statusCode = 404;
+        throw error;
+      }
+      if (post.creator.toString() != req.userId) {
+        const error = new Error("Not authorization.");
+        error.statusCode = 403;
         throw error;
       }
       clearImage(post.imageUrl);
