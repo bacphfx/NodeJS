@@ -22,7 +22,8 @@ class Feed extends Component {
   };
 
   componentDidMount() {
-    fetch("URL")
+    const userId = localStorage.getItem("userId");
+    fetch("http://localhost:5000/auth/user/" + userId)
       .then((res) => {
         if (res.status !== 200) {
           throw new Error("Failed to fetch user status.");
@@ -30,7 +31,7 @@ class Feed extends Component {
         return res.json();
       })
       .then((resData) => {
-        this.setState({ status: resData.status });
+        this.setState({ status: resData.user.status });
       })
       .catch(this.catchError);
 
