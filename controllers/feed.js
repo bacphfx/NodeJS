@@ -26,8 +26,8 @@ exports.getPosts = (req, res, next) => {
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
-        next(err);
       }
+      next(err);
     });
 };
 
@@ -72,8 +72,8 @@ exports.createPost = (req, res, next) => {
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
-        next(err);
       }
+      next(err);
     });
 };
 
@@ -94,8 +94,8 @@ exports.getPost = (req, res, next) => {
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
-        next(err);
       }
+      next(err);
     });
 };
 
@@ -147,8 +147,8 @@ exports.updatePost = (req, res, next) => {
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
-        next(err);
       }
+      next(err);
     });
 };
 
@@ -178,8 +178,8 @@ exports.deletePost = (req, res, next) => {
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
-        next(err);
       }
+      next(err);
     });
 };
 
