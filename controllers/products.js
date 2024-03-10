@@ -1,25 +1,25 @@
 const fs = require("fs");
 const path = require("path");
 const { validationResult } = require("express-validator/check");
-const Post = require("../models/post");
-const User = require("../models/user");
+const Product = require("../models/Products");
+const User = require("../models/User");
 
-exports.getPosts = (req, res, next) => {
+exports.getProducts = (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = 2;
   let totalItems;
-  Post.find()
+  Product.find()
     .countDocuments()
     .then((count) => {
       totalItems = count;
-      return Post.find()
-        .skip((currentPage - 1) * perPage)
-        .limit(perPage);
+      return Product.find();
+      // .skip((currentPage - 1) * perPage)
+      // .limit(perPage);
     })
-    .then((posts) => {
+    .then((products) => {
       return res.status(200).json({
         message: "Fetched posts successfully.",
-        posts: posts,
+        products: products,
         totalItems: totalItems,
       });
     })
@@ -76,18 +76,42 @@ exports.createPost = (req, res, next) => {
     });
 };
 
-exports.getPost = (req, res, next) => {
-  const postId = req.params.postId;
-  Post.findById(postId)
-    .then((post) => {
-      if (!post) {
-        const error = new Error("Could not find posts");
+exports.getProduct = (req, res, next) => {
+  const productId = req.params.productId;
+  Product.findById(productId)
+    .then((product) => {
+      if (!product) {
+        const error = new Error("Could not find product");
         error.statusCode = 404;
         throw error;
       }
       res.status(200).json({
-        message: "Post fetched.",
-        post: post,
+        message: "Product fetched.",
+        product: product,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getRilative = (req, res, next) => {
+  const productId = req.params.productId;
+  Product.findById(productId)
+    .then((product) => {
+      if (!product) {
+        const error = new Error("Could not find product");
+        error.statusCode = 404;
+        throw error;
+      }
+      Product.find({ category: product.category }).then((products) => {
+        res.status(200).json({
+          message: "Relative fetched.",
+          products: products,
+        });
       });
     })
     .catch((err) => {

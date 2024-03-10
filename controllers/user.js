@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator/check");
 const bcrypt = require("bcryptjs");
-const User = require("../models/user");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 exports.signup = (req, res, next) => {
@@ -11,15 +11,18 @@ exports.signup = (req, res, next) => {
     error.data = errors.array();
     throw error;
   }
-  const email = req.body.email;
-  const name = req.body.name;
-  const password = req.body.password;
+  const email = req.query.email;
+  const fullname = req.query.fullname;
+  const password = req.query.password;
+  const phone = req.query.phone;
+
   bcrypt
     .hash(password, 12)
     .then((hashed) => {
       const user = new User({
         email: email,
-        name: name,
+        fullname: fullname,
+        phone: phone,
         password: hashed,
       });
       return user.save();
@@ -63,7 +66,13 @@ exports.login = (req, res, next) => {
         "mysecretkey",
         { expiresIn: "1h" }
       );
-      res.status(200).json({ token: token, userId: loadedUser._id.toString() });
+      res
+        .status(200)
+        .json({
+          token: token,
+          userId: loadedUser._id.toString(),
+          fullname: loadedUser.fullname,
+        });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -73,7 +82,7 @@ exports.login = (req, res, next) => {
     });
 };
 
-exports.getuser = (req, res, next) => {
+exports.getUser = (req, res, next) => {
   const userId = req.params.userId;
   User.findById(userId)
     .then((user) => {
