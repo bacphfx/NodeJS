@@ -27,7 +27,7 @@ function App() {
           <Route path="/cart" component={Cart} />
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
-          {/* <Route path='/checkout' component={Checkout} />{' '} */}
+          <Route path="/checkout" component={Checkout} />{" "}
           <Route path="/history" component={History} />
           <Route path="/shop" component={Shop} />
         </Switch>

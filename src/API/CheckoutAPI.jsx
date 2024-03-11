@@ -1,10 +1,10 @@
-import axiosClient from './axiosClient';
+import axiosClient from "./axiosClient";
 
 const CheckoutAPI = {
-	postEmail: (query) => {
-		const url = `/email${query}`;
-		return axiosClient.post(url);
-	},
+  postCheckout: (query) => {
+    const url = `/checkout${query}`;
+    return axiosClient.post(url);
+  },
 };
 
 export default CheckoutAPI;

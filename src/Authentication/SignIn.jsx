@@ -10,6 +10,7 @@ import CartAPI from "../API/CartAPI";
 function SignIn(props) {
   //listCart được lấy từ redux
   const listCart = useSelector((state) => state.Cart.listCart);
+  console.log(listCart);
 
   const [email, setEmail] = useState("");
 
@@ -88,8 +89,8 @@ function SignIn(props) {
         for (let i = 0; i < listCart.length; i++) {
           //Nó sẽ lấy idUser và idProduct và count cần thêm để gửi lên server
           const params = {
-            idUser: localStorage.getItem("id_user"),
-            idProduct: listCart[i].idProduct,
+            userId: localStorage.getItem("userId"),
+            productId: listCart[i].productId,
             count: listCart[i].count,
           };
 

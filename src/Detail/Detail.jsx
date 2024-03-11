@@ -80,8 +80,8 @@ function Detail(props) {
     console.log(id_user_cart);
 
     const data = {
-      idUser: id_user_cart,
-      idProduct: detail._id,
+      userId: id_user_cart,
+      productId: detail._id,
       nameProduct: detail.name,
       priceProduct: detail.price,
       count: text,
@@ -93,8 +93,8 @@ function Detail(props) {
 
       const fetchPost = async () => {
         const params = {
-          idUser: id_user_cart, //localStorage.getItem('id_user')
-          idProduct: detail._id, // Lấy idProduct
+          userId: id_user_cart, //localStorage.getItem('id_user')
+          productId: detail._id, // Lấy idProduct
           count: text, // Lấy số lượng
         };
 

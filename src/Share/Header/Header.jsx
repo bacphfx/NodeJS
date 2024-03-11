@@ -29,7 +29,7 @@ function Header(props) {
   var userId = useSelector((state) => state.Session.userId);
 
   //Get idtemp từ redux khi user chưa đăng nhập
-  var idTemp = useSelector((state) => state.Cart.userId);
+  var idTemp = useSelector((state) => state.Cart.id_user);
 
   console.log(userId);
 
