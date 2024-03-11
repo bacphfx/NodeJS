@@ -8,6 +8,9 @@ const { v4: uuidv4 } = require("uuid");
 
 const productRoutes = require("./routes/product");
 const userRoutes = require("./routes/user");
+const cartRoutes = require("./routes/cart");
+const historyRoutes = require("./routes/history");
+const checkoutRoutes = require("./routes/checkout");
 
 const app = express();
 app.use(cors());
@@ -50,6 +53,9 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use("/products", productRoutes);
 app.use("/users", userRoutes);
+app.use("/carts", cartRoutes);
+app.use("/histories", historyRoutes);
+app.use("/checkout", checkoutRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
