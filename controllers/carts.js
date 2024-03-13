@@ -6,52 +6,70 @@ exports.addToCart = async (req, res, next) => {
   const productId = req.query.productId;
   const count = req.query.count;
 
-  const product = await Products.findOne({ _id: productId });
+  try {
+    const product = await Products.findOne({ _id: productId });
+    if (!product) {
+      const error = new Error("Could not find product");
+      error.statusCode = 404;
+      throw error;
+    }
 
-  const carts = await Carts.findOne({ userId: userId, productId: productId });
+    const carts = await Carts.findOne({ userId: userId, productId: productId });
+    if (!carts) {
+      const dataInsert = {
+        userId: userId,
+        productId: productId,
+        nameProduct: product.name,
+        priceProduct: product.price,
+        count: count,
+        img: product.img1,
+      };
 
-  if (!carts) {
-    const dataInsert = {
-      userId: userId,
-      productId: productId,
-      nameProduct: product.name,
-      priceProduct: product.price,
-      count: count,
-      img: product.img1,
-    };
-
-    Carts.insertMany(dataInsert);
-
-    res.send("Thanh Cong!");
-  } else {
-    carts.count += parseInt(count);
-
-    carts.save();
-
-    res.send("Thanh Cong!");
+      await Carts.insertMany(dataInsert);
+      res.status(200).json({ message: "Add to cart successfully!" });
+    } else {
+      carts.count += parseInt(count);
+      await carts.save();
+      res.status(200).json({ message: "Add to cart successfully!" });
+    }
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };
 
 //Hàm tìm những sản phẩm mà user đã thêm
 exports.getCart = async (req, res) => {
-  //Lấy idUser từ query
   const userId = req.query.userId;
-
-  //Tìm những sản phẩm mà user đã thêm
-  const carts = await Carts.find({ userId: userId });
-
-  res.json(carts);
+  try {
+    const carts = await Carts.find({ userId: userId });
+    if (!carts) {
+      const error = new Error("Could not find carts.");
+      error.statusCode = 404;
+      throw error;
+    }
+    res.status(200).json({ message: "Fetch carts successfully.", data: carts });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
 exports.deleteToCart = async (req, res) => {
-  //Lấy idUSer của user cần xóa
   const userId = req.query.userId;
-
-  //Lấy idProduct của user cần xóa
   const productId = req.query.productId;
 
-  //Tìm đúng cái sản phẩm mà User đã thêm vào giỏ hàng
-  var cart = await Carts.deleteOne({ userId: userId, productId: productId });
-
-  res.send("Thanh Cong!");
+  try {
+    await Carts.deleteOne({ userId: userId, productId: productId });
+    res.status(200).json({ message: "Delete successfully!" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };

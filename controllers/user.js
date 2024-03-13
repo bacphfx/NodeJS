@@ -66,13 +66,11 @@ exports.login = (req, res, next) => {
         "mysecretkey",
         { expiresIn: "1h" }
       );
-      res
-        .status(200)
-        .json({
-          token: token,
-          userId: loadedUser._id.toString(),
-          fullname: loadedUser.fullname,
-        });
+      res.status(200).json({
+        token: token,
+        userId: loadedUser._id.toString(),
+        fullname: loadedUser.fullname,
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {

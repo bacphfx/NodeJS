@@ -25,6 +25,12 @@ module.exports.checkout = async (req, res) => {
     // get user cat
     const cartsUser = await Carts.find({ userId: userId });
 
+    if (!cartsUser) {
+      const error = new Error("Could not find carts of user");
+      error.statusCode = 404;
+      throw error;
+    }
+
     let total = 0;
 
     cartsUser.map((value) => {
@@ -111,18 +117,16 @@ module.exports.checkout = async (req, res) => {
     };
 
     // //Insert data vào Bảng History
-    Histories.insertMany(data);
+    await Histories.insertMany(data);
 
     // //Xóa những sản phẩm trong Bảng Cart
-    Carts.deleteMany({ userId: userId })
-      .then(function () {
-        res.send("Thanh Cong");
-      })
-      .catch(function (error) {
-        res.send(error);
-      });
-  } catch (error) {
-    console.log(error);
-    res.send(error);
+    await Carts.deleteMany({ userId: userId });
+
+    res.status(200).json({ message: "Checkout successfully!" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };

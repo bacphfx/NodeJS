@@ -1,24 +1,49 @@
 const Histories = require("../models/History");
 
-module.exports.index = async (req, res) => {
+exports.getUserHistory = async (req, res, next) => {
   const userId = req.query.userId;
-  console.log(userId);
-
-  const histories = await Histories.find({ userId: userId });
-
-  res.json(histories);
+  try {
+    const histories = await Histories.find({ userId: userId });
+    if (!histories) {
+      const error = new Error("Could not find user histories");
+      error.statusCode = 404;
+      throw error;
+    }
+    res
+      .status(200)
+      .json({ message: "Fetch histories successfully", data: histories });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
-module.exports.detail = async (req, res) => {
+exports.getDetailHistory = async (req, res, next) => {
   const id = req.params.id;
 
-  const histories = await Histories.findOne({ _id: id });
-
-  res.json(histories);
+  try {
+    const history = await Histories.findOne({ _id: id });
+    if (!history) {
+      const error = new Error("Could not find user histories");
+      error.statusCode = 404;
+      throw error;
+    }
+    res
+      .status(200)
+      .json({ message: "Fetch histories successfully", data: history });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
-module.exports.history = async (req, res) => {
+exports.getAllHistories = async (req, res, next) => {
   const histories = await Histories.find();
-
-  res.json(histories);
+  res
+    .status(200)
+    .json({ message: "Fetch histories successfully", data: histories });
 };
