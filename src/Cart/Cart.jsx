@@ -10,14 +10,16 @@ import convertMoney from "../convertMoney";
 
 function Cart(props) {
   //id_user được lấy từ redux
-  const id_user = useSelector((state) => state.Cart.id_user);
+  const userId = useSelector((state) => state.Cart.userId);
+
+  const token = localStorage.getItem("token");
 
   //listCart được lấy từ redux
   const listCart = useSelector((state) => state.Cart.listCart);
 
   const [cart, setCart] = useState([]);
 
-  const [total, setTotal] = useState();
+  const [total, setTotal] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -67,11 +69,11 @@ function Cart(props) {
 
         const query = "?" + queryString.stringify(params);
 
-        const response = await CartAPI.getCarts(query);
+        const response = await CartAPI.getCarts(query, token);
 
-        setCart(response);
+        setCart(response.data);
 
-        getTotal(response);
+        getTotal(response.data);
       }
     };
 
@@ -96,7 +98,7 @@ function Cart(props) {
 
         const query = "?" + queryString.stringify(params);
 
-        const response = await CartAPI.deleteToCart(query);
+        const response = await CartAPI.deleteToCart(query, token);
         console.log(response);
       };
 
@@ -142,7 +144,7 @@ function Cart(props) {
         getProduct
     );
 
-    if (localStorage.getItem("id_user")) {
+    if (localStorage.getItem("userId")) {
       // user đã đăng nhập
 
       //Sau khi nhận được dữ liệu ở component con truyền lên thì sẽ gọi API xử lý dữ liệu
@@ -155,7 +157,7 @@ function Cart(props) {
 
         const query = "?" + queryString.stringify(params);
 
-        const response = await CartAPI.putToCart(query);
+        const response = await CartAPI.putToCart(query, token);
         console.log(response);
       };
 

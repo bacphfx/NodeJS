@@ -4,9 +4,7 @@ const token = localStorage.getItem("token");
 const ProductAPI = {
   getAPI: (token) => {
     const url = "/products";
-    return axiosClient.get(url, {
-      headers: { Authorization: "Bearer " + token },
-    });
+    return axiosClient.get(url);
   },
 
   getCategory: (query) => {

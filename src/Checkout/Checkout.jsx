@@ -10,6 +10,7 @@ import UserAPI from "../API/UserAPI";
 // const socket = io("http://localhost:5000");
 
 function Checkout(props) {
+  const token = localStorage.getItem("token");
   const [carts, setCarts] = useState([]);
 
   const [total, setTotal] = useState(0);
@@ -42,13 +43,13 @@ function Checkout(props) {
 
         const query = "?" + queryString.stringify(params);
 
-        const response = await CartAPI.getCarts(query);
+        const response = await CartAPI.getCarts(query, token);
 
         console.log(response);
 
-        setCarts(response);
+        setCarts(response.data);
 
-        getTotal(response);
+        getTotal(response.data);
 
         if (response.length === 0) {
           window.location.replace("/cart");
@@ -66,13 +67,9 @@ function Checkout(props) {
           userId: localStorage.getItem("userId"),
         };
 
-        const query = "?" + queryString.stringify(params);
-
         const response = await UserAPI.getDetailData(
           localStorage.getItem("userId")
         );
-
-        console.log(response);
 
         setFullname(response.user.fullname);
         setEmail(response.user.email);
@@ -147,8 +144,6 @@ function Checkout(props) {
               setPhoneError(false);
               setAddressError(true);
             } else {
-              console.log("Thanh Cong");
-
               setLoad(!load);
             }
           }
@@ -171,7 +166,7 @@ function Checkout(props) {
 
         const query = "?" + queryString.stringify(params);
 
-        const response = await CheckoutAPI.postCheckout(query);
+        const response = await CheckoutAPI.postCheckout(query, token);
 
         console.log(response);
       };

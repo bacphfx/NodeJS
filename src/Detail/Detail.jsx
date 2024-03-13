@@ -54,7 +54,7 @@ function Detail(props) {
   //Hàm này để lấy dữ liệu chi tiết sản phẩm
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await ProductAPI.getDetail(id, token);
+      const response = await ProductAPI.getDetail(id);
       setDetail(response.product);
     };
     fetchProduct();
@@ -100,7 +100,7 @@ function Detail(props) {
 
         const query = "?" + queryString.stringify(params);
 
-        const response = await CartAPI.postAddToCart(query);
+        const response = await CartAPI.postAddToCart(query, token);
 
         console.log(response);
       };

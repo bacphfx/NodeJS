@@ -10,7 +10,7 @@ import CartAPI from "../API/CartAPI";
 function SignIn(props) {
   //listCart được lấy từ redux
   const listCart = useSelector((state) => state.Cart.listCart);
-  console.log(listCart);
+  const token = localStorage.getItem("token");
 
   const [email, setEmail] = useState("");
 
@@ -96,7 +96,7 @@ function SignIn(props) {
 
           const query = "?" + queryString.stringify(params);
 
-          const response = await CartAPI.postAddToCart(query);
+          const response = await CartAPI.postAddToCart(query, token);
           console.log(response);
         }
 
