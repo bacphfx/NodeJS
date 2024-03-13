@@ -12,4 +12,6 @@ router.get("/", isAuth, cartController.getCart);
 
 router.delete("/delete", isAuth, cartController.deleteToCart);
 
+router.put("/update", isAuth, cartController.updateToCart);
+
 module.exports = router;

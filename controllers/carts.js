@@ -73,3 +73,23 @@ exports.deleteToCart = async (req, res) => {
     next(err);
   }
 };
+
+module.exports.updateToCart = async (req, res) => {
+  //Lấy idUSer của user cần sửa
+  const userId = req.query.userId;
+
+  //Lấy idProduct của user cần sửa
+  const productId = req.query.productId;
+
+  //Lấy count của user cần sửa
+  const count = req.query.count;
+
+  //Tìm đúng cái sản phẩm mà User cần sửa
+  var cart = await Carts.findOne({ userId: userId, productId: productId });
+
+  cart.count = count;
+
+  cart.save();
+
+  res.send("Update Thanh Cong");
+};
