@@ -1,17 +1,17 @@
 const express = require("express");
 const { body } = require("express-validator/check");
-const isAuth = require("../middleware/is-auth");
+const { verifyUser } = require("../middleware/is-auth");
 
 const cartController = require("../controllers/carts");
 
 const router = express.Router();
 
-router.post("/", isAuth, cartController.addToCart);
+router.post("/", verifyUser, cartController.addToCart);
 
-router.get("/", isAuth, cartController.getCart);
+router.get("/", verifyUser, cartController.getCart);
 
-router.delete("/delete", isAuth, cartController.deleteToCart);
+router.delete("/delete", verifyUser, cartController.deleteToCart);
 
-router.put("/update", isAuth, cartController.updateToCart);
+router.put("/update", verifyUser, cartController.updateToCart);
 
 module.exports = router;

@@ -1,10 +1,10 @@
 var express = require("express");
-const isAuth = require("../middleware/is-auth");
+const { verifyUser, verifyAdmin } = require("../middleware/is-auth");
 
 var checkoutController = require("../controllers/checkout");
 
 var router = express.Router();
 
-router.post("/", isAuth, checkoutController.checkout);
+router.post("/", verifyUser, checkoutController.checkout);
 
 module.exports = router;

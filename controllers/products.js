@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { validationResult } = require("express-validator/check");
 const Product = require("../models/Products");
-const User = require("../models/User");
+const User = require("../models/Users");
 
 exports.getProducts = (req, res, next) => {
   // const currentPage = req.query.page || 1;
@@ -18,7 +18,7 @@ exports.getProducts = (req, res, next) => {
     })
     .then((products) => {
       return res.status(200).json({
-        message: "Fetched posts successfully.",
+        message: "Fetched products successfully.",
         products: products,
         totalItems: totalItems,
       });
@@ -30,51 +30,6 @@ exports.getProducts = (req, res, next) => {
       next(err);
     });
 };
-
-// exports.createPost = (req, res, next) => {
-//   const errors = validationResult(req);
-//   if (!errors.isEmpty()) {
-//     const error = new Error("Validation failed, entered data is incorrect.");
-//     error.statusCode = 422;
-//     throw error;
-//   }
-//   if (!req.file) {
-//     const error = new Error("No image provided");
-//     error.statusCode = 422;
-//     throw error;
-//   }
-//   const imageUrl = req.file.path.replace("\\", "/");
-//   const title = req.body.title;
-//   const content = req.body.content;
-//   let creator;
-//   const post = new Post({
-//     title: title,
-//     content: content,
-//     imageUrl: imageUrl,
-//     creator: req.userId,
-//   });
-//   post
-//     .save()
-//     .then((result) => {
-//       return User.findById(req.userId).then((user) => {
-//         creator = user;
-//         user.post.push(result._id);
-//         return user.save().then(() => {
-//           return res.status(201).json({
-//             message: "Post created successfully!",
-//             post: result,
-//             creator: { _id: creator._id, name: creator.name },
-//           });
-//         });
-//       });
-//     })
-//     .catch((err) => {
-//       if (!err.statusCode) {
-//         err.statusCode = 500;
-//       }
-//       next(err);
-//     });
-// };
 
 exports.getProduct = (req, res, next) => {
   const productId = req.params.productId;

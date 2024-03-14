@@ -75,21 +75,24 @@ exports.deleteToCart = async (req, res) => {
 };
 
 module.exports.updateToCart = async (req, res) => {
-  //Lấy idUSer của user cần sửa
   const userId = req.query.userId;
-
-  //Lấy idProduct của user cần sửa
   const productId = req.query.productId;
-
-  //Lấy count của user cần sửa
   const count = req.query.count;
 
-  //Tìm đúng cái sản phẩm mà User cần sửa
-  var cart = await Carts.findOne({ userId: userId, productId: productId });
-
-  cart.count = count;
-
-  cart.save();
-
-  res.send("Update Thanh Cong");
+  try {
+    const cart = await Carts.findOne({ userId: userId, productId: productId });
+    if (!cart) {
+      const error = new Error("Could not find carts.");
+      error.statusCode = 404;
+      throw error;
+    }
+    cart.count = count;
+    await cart.save();
+    res.status(200).json({ message: "Update cart successfully!" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
