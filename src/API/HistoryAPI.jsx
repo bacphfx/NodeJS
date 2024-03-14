@@ -1,14 +1,18 @@
 import axiosClient from "./axiosClient";
 
 const HistoryAPI = {
-  getHistoryAPI: (query) => {
+  getHistoryAPI: (query, token) => {
     const url = `/histories/user${query}`;
-    return axiosClient.get(url);
+    return axiosClient.get(url, {
+      headers: { Authorization: "Bearer " + token },
+    });
   },
 
-  getDetail: (id) => {
+  getDetail: (id, token) => {
     const url = `/histories/${id}`;
-    return axiosClient.get(url);
+    return axiosClient.get(url, {
+      headers: { Authorization: "Bearer " + token },
+    });
   },
 };
 

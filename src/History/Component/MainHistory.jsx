@@ -7,6 +7,7 @@ MainHistory.propTypes = {};
 
 function MainHistory(props) {
   const [listCart, setListCart] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,10 +17,10 @@ function MainHistory(props) {
 
       const query = "?" + queryString.stringify(params);
 
-      const response = await HistoryAPI.getHistoryAPI(query);
+      const response = await HistoryAPI.getHistoryAPI(query, token);
       console.log(response);
 
-      setListCart(response);
+      setListCart(response.data);
     };
 
     fetchData();

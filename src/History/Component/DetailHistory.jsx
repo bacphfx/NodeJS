@@ -9,16 +9,18 @@ function DetailHistory(props) {
 
   const [information, setInformation] = useState({});
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
     const fetchData = async () => {
-      const response = await HistoryAPI.getDetail(id);
+      const response = await HistoryAPI.getDetail(id, token);
       console.log(response.cart);
 
-      setCart(response.cart);
+      setCart(response.data.cart);
 
       console.log(response);
 
-      setInformation(response);
+      setInformation(response.data);
     };
 
     fetchData();

@@ -31,10 +31,6 @@ function Header(props) {
   //Get idtemp từ redux khi user chưa đăng nhập
   var idTemp = useSelector((state) => state.Cart.id_user);
 
-  console.log(userId);
-
-  console.log(idTemp);
-
   const [loginUser, setLoginUser] = useState(false);
   const [nameUser, setNameUser] = useState(false);
 
